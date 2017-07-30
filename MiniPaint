@@ -1,0 +1,37 @@
+from Tkinter import *
+
+def czysc(zdarzenie = None):
+    tlo.delete('all')
+
+def zamknij(zdarzenie = None):
+    czysc()
+    okno.quit()
+    okno.destroy()
+
+def poczatek(zdarzenie):
+    global x,y
+    x = zdarzenie.x
+    y = zdarzenie.y
+
+def rysuj(zdarzenie):
+    global x,y
+    if x is not None:
+        tlo.create_line(x,y,zdarzenie.x, zdarzenie.y)
+        x = zdarzenie.x
+        y = zdarzenie.y
+
+def koncz(zdarzenie):
+    global  x, y
+    rysuj(zdarzenie)
+    x = None
+
+x = None
+okno = Tk()
+tlo = Canvas(okno, width = 400, height = 400, bg = "white")
+tlo.pack(fill = BOTH, expand = YES)
+tlo.bind("<Button -1>", poczatek)
+tlo.bind("<Button-3>", czysc)
+tlo.bind("<ButtonRelease-1>", koncz)
+tlo.bind("<Motion>", rysuj)
+okno.bind("<Any-KeyPress>", zamknij)
+okno.mainloop()
