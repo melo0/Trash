@@ -38,24 +38,32 @@ def kolor(c):
     global kolor_pisaka
     kolor_pisaka = c
 
-
+def ksztalt():
+    global ksztalt_pisaka
+    ksztalt_pisaka = choice(['error', 'gray75', 'gray50', 'gray25', 'gray12', 'hourglass', 'info', 'questhead', 'question', 'warning'])
+    
+    
 x = None
 grubosc_lini = 1
 kolor_pisaka = 'black'
+ksztalt_pisaka = 'gray75'
+
+
 okno = Tk()
 ramka= Frame(okno)
 ramka.pack(side = LEFT)
 tlo = Canvas(okno, width = 800, height = 600, bg = "white")
 tlo.pack(fill = BOTH, expand = YES)
-
 tlo.bind("<Button-1>", poczatek)
 tlo.bind("<Button-3>", czysc)
 tlo.bind("<ButtonRelease-1>", koncz)
 tlo.bind("<Motion>", rysuj)
 
-przycisk1 = Button(ramka, text = "Zamknij", command = zamknij)
-przycisk2 = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
-przycisk3 = Button(ramka, text = "Ciensza linia", command = grubosc_minus )
+przycisk_zamknij = Button(ramka, text = "Zamknij", command = zamknij)
+
+przycisk_plus = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
+przycisk_minus = Button(ramka, text = "Ciensza linia", command = grubosc_minus )
+
 przycisk_w = Button(ramka, bg = "white", command = lambda: kolor("white"))
 przycisk_blk = Button(ramka, bg = "black", command = lambda: kolor("black"))
 przycisk_b = Button(ramka, bg = "blue", command = lambda: kolor("blue"))
@@ -63,9 +71,12 @@ przycisk_r = Button(ramka, bg = "red", command = lambda: kolor("red"))
 przycisk_g = Button(ramka, bg = "green", command = lambda: kolor("green"))
 przycisk_y = Button(ramka, bg = "yellow", command = lambda: kolor("yellow"))
 
-przycisk1.pack(side = TOP, fill = BOTH)
-przycisk2.pack(side = TOP, fill = BOTH)
-przycisk3.pack(side = TOP, fill = BOTH)
+przycisk_k = Button(ramka, text = "ksztalt", command = ksztalt)
+
+przycisk_zamknij.pack(side = TOP, fill = BOTH)
+
+przycisk_plus.pack(side = TOP, fill = BOTH)
+przycisk_minus.pack(side = TOP, fill = BOTH)
 
 przycisk_w.pack(side = TOP, fill = BOTH)
 przycisk_blk.pack(side = TOP, fill = BOTH)
@@ -74,5 +85,6 @@ przycisk_r.pack(side = TOP, fill = BOTH)
 przycisk_g.pack(side = TOP, fill = BOTH)
 przycisk_y.pack(side = TOP, fill = BOTH)
 
+przycisk_k.pack(side = TOP, fill = BOTH)
 
 okno.mainloop()
