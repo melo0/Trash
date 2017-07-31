@@ -1,4 +1,6 @@
-from Tkinter import *
+from tkinter import *
+
+grubosc_lini = 1
 
 def czysc(zdarzenie = None):
     tlo.delete('all')
@@ -16,7 +18,7 @@ def poczatek(zdarzenie):
 def rysuj(zdarzenie):
     global x,y
     if x is not None:
-        tlo.create_line(x,y,zdarzenie.x, zdarzenie.y)
+        tlo.create_line(x,y,zdarzenie.x, zdarzenie.y, width = grubosc_lini)
         x = zdarzenie.x
         y = zdarzenie.y
 
@@ -24,6 +26,19 @@ def koncz(zdarzenie):
     global  x, y
     rysuj(zdarzenie)
     x = None
+
+
+def grubosc_plus():
+    global grubosc_lini
+    grubosc_lini += 1
+
+def grubosc_minus():
+    global grubosc_lini
+    if grubosc_lini > 1:
+        grubosc_lini -= 1
+    
+
+
 
 x = None
 okno = Tk()
@@ -33,5 +48,13 @@ tlo.bind("<Button -1>", poczatek)
 tlo.bind("<Button-3>", czysc)
 tlo.bind("<ButtonRelease-1>", koncz)
 tlo.bind("<Motion>", rysuj)
-okno.bind("<Any-KeyPress>", zamknij)
+
+ramka= Frame(okno)
+ramka.pack(side = BOTTOM)
+przycik1 = Button(ramka, text = "Zamknij", command = zamknij)
+przycik2 = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
+przycik3 = Button(ramka, text = "Ciensza linia", command = grubosc_minus )
+przycik1.pack(side = LEFT)
+przycik2.pack(side = LEFT)
+przycik3.pack(side = LEFT)
 okno.mainloop()
