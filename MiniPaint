@@ -37,24 +37,46 @@ def grubosc_minus():
     if grubosc_lini > 1:
         grubosc_lini -= 1
     
-
+def kolor(c):
+    global kolor_pisaka
+    kolor_pisaka = c
 
 
 x = None
+grubosc_lini = 1
+kolor_pisaka = 'black'
 okno = Tk()
-tlo = Canvas(okno, width = 400, height = 400, bg = "white")
+ramka= Frame(okno)
+ramka.pack(side = LEFT)
+tlo = Canvas(okno, width = 800, height = 600, bg = "white")
 tlo.pack(fill = BOTH, expand = YES)
+
 tlo.bind("<Button -1>", poczatek)
 tlo.bind("<Button-3>", czysc)
 tlo.bind("<ButtonRelease-1>", koncz)
 tlo.bind("<Motion>", rysuj)
 
-ramka= Frame(okno)
-ramka.pack(side = BOTTOM)
-przycik1 = Button(ramka, text = "Zamknij", command = zamknij)
-przycik2 = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
-przycik3 = Button(ramka, text = "Ciensza linia", command = grubosc_minus )
-przycik1.pack(side = LEFT)
-przycik2.pack(side = LEFT)
-przycik3.pack(side = LEFT)
+
+przycisk1 = Button(ramka, text = "Zamknij", command = zamknij)
+przycisk2 = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
+przycisk3 = Button(ramka, text = "Ciensza linia", command = grubosc_minus )
+przycisk_w = Button(ramka, bg = "white", command = lambda: kolor("white"))
+przycisk_blk = Button(ramka, bg = "black", command = lambda: kolor("black"))
+przycisk_b = Button(ramka, bg = "blue", command = lambda: kolor("blue"))
+przycisk_r = Button(ramka, bg = "red", command = lambda: kolor("red"))
+przycisk_g = Button(ramka, bg = "green", command = lambda: kolor("green"))
+przycisk_y = Button(ramka, bg = "yellow", command = lambda: kolor("yellow"))
+
+przycisk1.pack(side = TOP, fill = BOTH)
+przycisk2.pack(side = TOP, fill = BOTH)
+przycisk3.pack(side = TOP, fill = BOTH)
+
+przycisk_w.pack(side = TOP, fill = BOTH)
+przycisk_blk.pack(side = TOP, fill = BOTH)
+przycisk_b.pack(side = TOP, fill = BOTH)
+przycisk_r.pack(side = TOP, fill = BOTH)
+przycisk_g.pack(side = TOP, fill = BOTH)
+przycisk_y.pack(side = TOP, fill = BOTH)
+
+
 okno.mainloop()
