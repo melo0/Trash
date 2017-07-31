@@ -1,7 +1,5 @@
 from tkinter import *
 
-grubosc_lini = 1
-
 def czysc(zdarzenie = None):
     tlo.delete('all')
 
@@ -27,7 +25,6 @@ def koncz(zdarzenie):
     rysuj(zdarzenie)
     x = None
 
-
 def grubosc_plus():
     global grubosc_lini
     grubosc_lini += 1
@@ -51,11 +48,10 @@ ramka.pack(side = LEFT)
 tlo = Canvas(okno, width = 800, height = 600, bg = "white")
 tlo.pack(fill = BOTH, expand = YES)
 
-tlo.bind("<Button -1>", poczatek)
+tlo.bind("<Button-1>", poczatek)
 tlo.bind("<Button-3>", czysc)
 tlo.bind("<ButtonRelease-1>", koncz)
 tlo.bind("<Motion>", rysuj)
-
 
 przycisk1 = Button(ramka, text = "Zamknij", command = zamknij)
 przycisk2 = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
