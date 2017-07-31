@@ -1,4 +1,7 @@
 from tkinter import *
+from random import *
+
+
 
 def czysc(zdarzenie = None):
     tlo.delete('all')
@@ -16,7 +19,7 @@ def poczatek(zdarzenie):
 def rysuj(zdarzenie):
     global x,y
     if x is not None:
-        tlo.create_line(x,y,zdarzenie.x, zdarzenie.y, width = grubosc_lini)
+        tlo.create_line(x,y,zdarzenie.x, zdarzenie.y, width = grubosc_lini, fill = kolor_pisaka, stipple = ksztalt_pisaka)
         x = zdarzenie.x
         y = zdarzenie.y
 
@@ -42,36 +45,44 @@ def ksztalt():
     global ksztalt_pisaka
     ksztalt_pisaka = choice(['error', 'gray75', 'gray50', 'gray25', 'gray12', 'hourglass', 'info', 'questhead', 'question', 'warning'])
     
-    
+
 x = None
 grubosc_lini = 1
 kolor_pisaka = 'black'
 ksztalt_pisaka = 'gray75'
 
-
 okno = Tk()
-ramka= Frame(okno)
-ramka.pack(side = LEFT)
+ramka_lewa = Frame(okno)
+ramka_lewa.pack(side = LEFT)
+ramka_przyciski= Frame(ramka_lewa)
+ramka_przyciski.pack(side = TOP)
+ramka_kolor1 = Frame(ramka_lewa)
+ramka_kolor1.pack(side = LEFT)
+ramka_kolor2 = Frame(ramka_lewa)
+ramka_kolor2.pack(side = RIGHT)
+
 tlo = Canvas(okno, width = 800, height = 600, bg = "white")
 tlo.pack(fill = BOTH, expand = YES)
+
 tlo.bind("<Button-1>", poczatek)
 tlo.bind("<Button-3>", czysc)
 tlo.bind("<ButtonRelease-1>", koncz)
 tlo.bind("<Motion>", rysuj)
 
-przycisk_zamknij = Button(ramka, text = "Zamknij", command = zamknij)
 
-przycisk_plus = Button(ramka, text = "Grubsza linia", command = grubosc_plus )
-przycisk_minus = Button(ramka, text = "Ciensza linia", command = grubosc_minus )
+przycisk_zamknij = Button(ramka_przyciski, width = 7, text = "Zamknij", command = zamknij)
 
-przycisk_w = Button(ramka, bg = "white", command = lambda: kolor("white"))
-przycisk_blk = Button(ramka, bg = "black", command = lambda: kolor("black"))
-przycisk_b = Button(ramka, bg = "blue", command = lambda: kolor("blue"))
-przycisk_r = Button(ramka, bg = "red", command = lambda: kolor("red"))
-przycisk_g = Button(ramka, bg = "green", command = lambda: kolor("green"))
-przycisk_y = Button(ramka, bg = "yellow", command = lambda: kolor("yellow"))
+przycisk_plus = Button(ramka_przyciski, width =7, text = "+", command = grubosc_plus )
+przycisk_minus = Button(ramka_przyciski, width = 7, text = "-", command = grubosc_minus )
 
-przycisk_k = Button(ramka, text = "ksztalt", command = ksztalt)
+przycisk_w = Button(ramka_kolor1, width = 3, bg = "white", command = lambda: kolor("white"))
+przycisk_blk = Button(ramka_kolor1, width = 3, bg = "black", command = lambda: kolor("black"))
+przycisk_b = Button(ramka_kolor1, width = 3, bg = "blue", command = lambda: kolor("blue"))
+przycisk_r = Button(ramka_kolor2, width = 3, bg = "red", command = lambda: kolor("red"))
+przycisk_g = Button(ramka_kolor2, width = 3, bg = "green", command = lambda: kolor("green"))
+przycisk_y = Button(ramka_kolor2, width = 3, bg = "yellow", command = lambda: kolor("yellow"))
+
+przycisk_k = Button(ramka_przyciski, text = "ksztalt", command = ksztalt)
 
 przycisk_zamknij.pack(side = TOP, fill = BOTH)
 
