@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from random import *
 
 
@@ -21,17 +22,19 @@ def rysuj(zdarzenie):
     global typ_pisaka
     if x is not None:
         if typ_pisaka == 'line':
-            tlo.create_line(x,y,zdarzenie.x, zdarzenie.y, width = grubosc_lini, fill = kolor_pisaka, stipple = ksztalt_pisaka)
+            tlo.create_line(x, y, zdarzenie.x, zdarzenie.y, width = grubosc_lini, fill = kolor_pisaka, stipple = ksztalt_pisaka)
             x = zdarzenie.x
             y = zdarzenie.y
         if typ_pisaka == 'oval':
-            tlo.create_oval(x,y, zdarzenie.x, zdarzenie.y, outline = kolor_pisaka)
+            tlo.create_oval(x, y, zdarzenie.x, zdarzenie.y, outline = kolor_pisaka)
         
 
 
 def koncz(zdarzenie):
     global  x, y
     rysuj(zdarzenie)
+    x = zdarzenie.x
+    y = zdarzenie.y
     x = None
 
 def grubosc_plus():
@@ -66,14 +69,13 @@ kolor_pisaka = 'black'
 ksztalt_pisaka = 'gray75'
 
 okno = Tk()
-ramka_lewa = Frame(okno)
-ramka_lewa.pack(side = LEFT)
+ramka_lewa = ttk.Frame(okno, height = 300, padding = (5,50,5,10))
+ramka_lewa.pack(side = LEFT, fill = BOTH)
 ramka_przyciski= Frame(ramka_lewa)
 ramka_przyciski.pack(side = TOP)
-ramka_kolor1 = Frame(ramka_lewa)
-ramka_kolor1.pack(side = LEFT)
-ramka_kolor2 = Frame(ramka_lewa)
-ramka_kolor2.pack(side = RIGHT)
+ramka_kolor = ttk.Frame(ramka_lewa, padding = (0,50,0,10))
+ramka_kolor.pack(side = TOP)
+
 
 tlo = Canvas(okno, width = 800, height = 600, bg = "white")
 tlo.pack(fill = BOTH, expand = YES)
@@ -89,29 +91,29 @@ przycisk_zamknij = Button(ramka_przyciski, width = 7, text = "Zamknij", command 
 przycisk_plus = Button(ramka_przyciski, width =7, text = "+", command = grubosc_plus )
 przycisk_minus = Button(ramka_przyciski, width = 7, text = "-", command = grubosc_minus )
 
-przycisk_w = Button(ramka_kolor1, width = 3, bg = "white", command = lambda: kolor("white"))
-przycisk_blk = Button(ramka_kolor1, width = 3, bg = "black", command = lambda: kolor("black"))
-przycisk_b = Button(ramka_kolor1, width = 3, bg = "blue", command = lambda: kolor("blue"))
-przycisk_r = Button(ramka_kolor2, width = 3, bg = "red", command = lambda: kolor("red"))
-przycisk_g = Button(ramka_kolor2, width = 3, bg = "green", command = lambda: kolor("green"))
-przycisk_y = Button(ramka_kolor2, width = 3, bg = "yellow", command = lambda: kolor("yellow"))
+przycisk_w = Button(ramka_kolor, width = 3, bg = "white", command = lambda: kolor("white"))
+przycisk_blk = Button(ramka_kolor, width = 3, bg = "black", command = lambda: kolor("black"))
+przycisk_b = Button(ramka_kolor, width = 3, bg = "blue", command = lambda: kolor("blue"))
+przycisk_r = Button(ramka_kolor, width = 3, bg = "red", command = lambda: kolor("red"))
+przycisk_g = Button(ramka_kolor, width = 3, bg = "green", command = lambda: kolor("green"))
+przycisk_y = Button(ramka_kolor, width = 3, bg = "yellow", command = lambda: kolor("yellow"))
 
 przycisk_k = Button(ramka_przyciski, text = "ksztalt", command = ksztalt)
 przycisk_pisak = Button(ramka_przyciski, text = "rodzaj", command = pisak)
 
-przycisk_zamknij.pack(side = TOP, fill = BOTH)
+przycisk_zamknij.grid(row = 0, sticky=W, rowspan=2)
+przycisk_plus.grid(row = 4, sticky=W, rowspan=2)
+przycisk_minus.grid(row = 8, sticky=W, rowspan=2)
+przycisk_k.grid(row = 12, sticky=W+E, rowspan=2)
+przycisk_pisak.grid(row = 16, sticky=W+E, rowspan=2)
 
-przycisk_plus.pack(side = TOP, fill = BOTH)
-przycisk_minus.pack(side = TOP, fill = BOTH)
+przycisk_w.grid(row = 0, column = 1)
+przycisk_blk.grid(row = 0, column = 2)
+przycisk_b.grid(row = 1, column = 1)
+przycisk_r.grid(row = 1, column = 2)
+przycisk_g.grid(row = 2, column = 1)
+przycisk_y.grid(row = 2, column = 2)
 
-przycisk_w.pack(side = TOP, fill = BOTH)
-przycisk_blk.pack(side = TOP, fill = BOTH)
-przycisk_b.pack(side = TOP, fill = BOTH)
-przycisk_r.pack(side = TOP, fill = BOTH)
-przycisk_g.pack(side = TOP, fill = BOTH)
-przycisk_y.pack(side = TOP, fill = BOTH)
 
-przycisk_k.pack(side = TOP, fill = BOTH)
-przycisk_pisak.pack(side = TOP, fill = BOTH)
 
 okno.mainloop()
