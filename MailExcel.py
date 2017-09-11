@@ -22,27 +22,12 @@ msg = []
 
 print('Reading rows...')
 
-for row in range(2, sheet.max_row):
+for wiersz in range(2, Arkusz.max_row):
     tresc = []
-    tresc.append(str(sheet['A'+ str(row)].value))
-    tresc.append(str(sheet['B'+ str(row)].value))
-    tresc.append(str(sheet['C'+ str(row)].value))
-    tresc.append(str(sheet['D'+ str(row)].value))
-    tresc.append(str(sheet['E'+ str(row)].value))
-    tresc.append(str(sheet['F'+ str(row)].value))
-    tresc.append(str(sheet['G'+ str(row)].value))
-    tresc.append(str(sheet['H'+ str(row)].value))
-    tresc.append(str(sheet['I'+ str(row)].value))
-    tresc.append(str(sheet['J'+ str(row)].value))
-    tresc.append(str(sheet['K'+ str(row)].value))
-    tresc.append(str(sheet['L'+ str(row)].value))
-    tresc.append(str(sheet['M'+ str(row)].value))
-    tresc.append(str(sheet['N'+ str(row)].value))
-    tresc.append(str(sheet['O'+ str(row)].value))
-    tresc.append(str(sheet['P'+ str(row)].value))
-    tresc.append(str(sheet['Q'+ str(row)].value))
-    tresc.append(str(sheet['R'+ str(row)].value))
-    adres = sheet['T' + str(row)].value
+    for c in Arkusz['A'+str(wiersz):'Q'+str(wiersz)]:
+        for v in c:
+            tresc.append(v.value)
+    adres = Arkusz['T' + str(wiersz)].value
     baza.setdefault(adres,{'zawartość': []})
     baza[adres]['zawartość'] += [tresc]
 
