@@ -14,13 +14,7 @@ haslo = " "
 server = smtplib.SMTP("smtp.poczta.onet.pl", 587)
 server.starttls()
 server.login(nadawca, haslo)
-
-
-
-#server.set_debuglevel(1)
 msg = []
-
-print('Reading rows...')
 
 for wiersz in range(2, Arkusz.max_row):
     tresc = []
