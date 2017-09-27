@@ -2,19 +2,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import openpyxl, pprint
-import smtplib
+import win32com.client as win32
 
-print('Opening workbook...')
-wb = openpyxl.load_workbook('test.xlsx')
-sheet = wb.get_sheet_by_name('Arkusz1')
+
+def do_pliku(dane):
+    plik = open("dane.txt", "w")
+    plik.write(dane)
+    plik.close()
+    return
+
+def emailer(text, subject, recipient):
+
+    outlook = win32.Dispatch('outlook.application')
+    mail = outlook.CreateItem(0)
+    mail.To = recipient
+    mail.Subject = subject
+    mail.HtmlBody = text
+    attachment = str(r'C:\Users\lsnopek\workspace\All_Programs\dane.txt')
+    mail.Attachments.Add(attachment)
+    mail.send
+
+Plik = openpyxl.load_workbook('test.xlsx')
+Arkusz = Plik.get_sheet_by_name('Arkusz1')
 baza = {}
-nadawca = " "
-haslo = " "
+msg =  "Data zał.,Flow,Ferma zał.,SMR,numer,fermy,Godz.Zał.,Rodzaj zwierząt,Liczba zwierząt,Ferma docelowa,SMR,numer fermy,Powiat,km,godz. Rozł.,pojazd,nr rej pojazdu,nr rej naczepy/przyczepy,Uwagi" + "\n"
 
-server = smtplib.SMTP("smtp.poczta.onet.pl", 587)
-server.starttls()
-server.login(nadawca, haslo)
-msg = []
 
 for wiersz in range(2, Arkusz.max_row):
     tresc = []
@@ -26,13 +38,8 @@ for wiersz in range(2, Arkusz.max_row):
     baza[adres]['zawartość'] += [tresc]
 
 for i in baza:
-    print('adres do wysyłki: ' + i)
-
     for k in baza[i]['zawartość']:
-        msg += [k]
-    print(msg)
-
-    # server.sendmail('test_rozsylania@agriplus.pl', i, msg)
-    msg = []
-
-server.quit()
+        msg += "\n" + str(k)
+        do_pliku(msg)
+    emailer('W załączniku znajdują się dane z transportów - TESTY', 'TEST - Wysłki danych', i)
+    msg = "Data zał.,Flow,Ferma zał.,SMR,numer,fermy,Godz.Zał.,Rodzaj zwierząt,Liczba zwierząt,Ferma docelowa,SMR,numer fermy,Powiat,km,godz. Rozł.,pojazd,nr rej pojazdu,nr rej naczepy/przyczepy,Uwagi" + "\n"
