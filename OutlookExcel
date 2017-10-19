@@ -4,17 +4,14 @@
 import openpyxl, pprint
 import win32com.client as win32
 import pyexcel
+from tkinter import *
+from tkinter import ttk
+from tkinter import filedialog
+import tkinter.ttk
 
-
-
-def do_pliku(dane):
-    plik = open("dane.txt", "w")
-    plik.write(dane)
-    plik.close()
-    return
 
 def do_excela(wartosc):
-    pyexcel.save_as(array=wartosc, dest_file_name="Excel.xls")
+    pyexcel.save_as(array=wartosc, dest_file_name=r'C:/Send/Excel.xls')
 
 def emailer(text, subject, recipient):
     outlook = win32.Dispatch('outlook.application')
@@ -22,28 +19,61 @@ def emailer(text, subject, recipient):
     mail.To = recipient
     mail.Subject = subject
     mail.HtmlBody = text
-    attachment = str(r'C:\Users\lsnopek\workspace\All_Programs\Excel.xls')
+    attachment = str(r'C:/Send/Excel.xls')
     mail.Attachments.Add(attachment)
     mail.send
 
-Plik = openpyxl.load_workbook('test.xlsx')
-Arkusz = Plik.get_sheet_by_name('Arkusz1')
+def Wczytaj():
+    pole_adresu.delete(0, END)
+    pole_adresu.insert(END, tkinter.filedialog.askopenfilename())
+    return
 
-baza = {}
+def Wyślij():
+    nowa_tablica = []
+    tablica = pyexcel.get_sheet(file_name=pole_adresu.get())
+    słownik = {}
+    for i in range(0, 10):
+        nowa_tablica.append(tablica.row[i])
+    dane = pyexcel.get_sheet(file_name=pole_adresu.get(), start_row=10)
+    for row in dane:
+        adres1 = str(row[-2:-1])
+        adres2 = str(row[-1:])
+        wartości = row[:-3]
+        słownik.setdefault(adres1, [wartości])
+        słownik.setdefault(adres2, [wartości])
+        słownik[adres1] += [wartości]
+        słownik[adres2] += [wartości]
+    for cel in słownik:
+        x = nowa_tablica + słownik[cel]
+        do_excela(x)
+        emailer(treść_wiadomości.get(), tytuł_wiadomości.get(),cel)
 
-for wiersz in range(2, Arkusz.max_row):
-    tresc = []
-    for c in Arkusz['A'+str(wiersz):'Q'+str(wiersz)]:
-        for v in c:
-            tresc.append(v.value)
-    adres = Arkusz['T' + str(wiersz)].value
-    baza.setdefault(adres,{'zawartość': []})
-    baza[adres]['zawartość'] += [tresc]
 
-for i in baza:
-    x = [["Data zał.","Flow","Ferma zał.","SMR,numer","fermy","Godz.Zał.","Rodzaj zwierząt","Liczba zwierząt","Ferma docelowa","SMR,numer fermy","Powiat","km","godz. Rozł.","pojazd","nr rej pojazdu","nr rej naczepy/przyczepy","Uwagi" ]]+baza[i]['zawartość']
-    do_excela(x)
-    emailer('W załączniku znajdują się dane z transportów - TESTY', 'TEST - Wysłki danych', i)
+if __name__ == "__main__":
+    okno = tkinter.Tk()
+    okno.title("Rozsyłanie danych dla kierowców")
+    okno.geometry("650x160")
+    ramka = ttk.Frame(okno, padding=(10, 10, 10, 10))
+    pole_adresu = ttk.Entry(ramka, width = 80)
+    treść_wiadomości = ttk.Entry(ramka, width = 80)
+    tytuł_wiadomości = ttk.Entry(ramka, width = 80)
+    treść_wiadomości.insert(END, 'W załączniku znajdują się dane z transportów - TESTY')
+    tytuł_wiadomości.insert(END, 'TEST - Wysłki danych')
+    etykieta1 = ttk.Label(ramka, text='Temat')
+    etykieta2 = ttk.Label(ramka, text='Treść wiadomości')
+    etykieta3 = ttk.Label(ramka, text='Lokalizacja pliku')
+    p_wczytaj = ttk.Button(ramka, text = "Wskaż plik", command = lambda: Wczytaj() )
+    p_wyślij = ttk.Button(ramka, text = "Wyślij", command = lambda: Wyślij())
+    etykieta3.grid(row=0, stick=W, padx=5, pady=5)
+    etykieta1.grid(row = 1, stick = W, padx=5, pady=5)
+    etykieta2.grid(row = 2, stick = W, padx=5, pady=5)
+    pole_adresu.grid(row=0, column=1, columnspan = 2, stick=W + E, padx=5, pady=5)
+    tytuł_wiadomości.grid(row = 1, column = 1, columnspan = 2, stick = W +E, padx=5, pady=5)
+    treść_wiadomości.grid(row = 2, column = 1, columnspan = 2, stick = W + E, padx=5, pady=5)
+    p_wczytaj.grid(row = 3, column = 1, stick = W, padx=5, pady=5)
+    p_wyślij.grid(row = 3, column = 1, stick = E, padx=5, pady=5)
+    ramka.pack(fill=BOTH)
+    okno.mainloop()
 
 
 
