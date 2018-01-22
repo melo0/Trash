@@ -1,7 +1,11 @@
 #! python3
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import openpyxl, pprint
+#--------------
+# WERSJA 1.3
+#--------------
+
+
 import win32com.client as win32
 import pyexcel
 from tkinter import *
@@ -10,73 +14,88 @@ from tkinter import filedialog
 import tkinter.ttk
 
 
-def do_excela(wartosc):
-    pyexcel.save_as(array=wartosc, dest_file_name=r'C:/Send/Excel.xls')
+def To_excel(value):
+    pyexcel.save_as(array=value, dest_file_name=r'C:/Send/Excel.xls')
 
-def emailer(text, subject, recipient):
+def Emailer(text, subject, recipient):
     outlook = win32.Dispatch('outlook.application')
     mail = outlook.CreateItem(0)
-    mail.To = recipient
+    mail.BCC = recipient
     mail.Subject = subject
     mail.HtmlBody = text
     attachment = str(r'C:/Send/Excel.xls')
     mail.Attachments.Add(attachment)
     mail.send
 
-def Wczytaj():
-    pole_adresu.delete(0, END)
-    pole_adresu.insert(END, tkinter.filedialog.askopenfilename())
+def Processing():
+    new_table = []
+    table = pyexcel.get_sheet(file_name=address_field.get())
+    dictionary = {}
+    for i in range(0, 10):
+        new_table.append(table.row[i])
+    Sheet = pyexcel.get_sheet(file_name=address_field.get(), start_row=10)
+    for row in Sheet:
+        dest3 = str(row[-3:-2])
+        dest1 = str(row[-2:-1])
+        dest2 = str(row[-1:])
+        print(dest2 , dest1, dest3)
+        Values = row[:-4]
+        if dest1 != "['']":
+            dictionary.setdefault(dest1, [])
+        if dest2 != "['']":
+            dictionary.setdefault(dest2, [])
+        if dest3 != "['']":
+            dictionary.setdefault(dest3, [])
+        if dest1 != "['']":
+            dictionary[dest1] += [Values]
+        if dest2 != "['']":
+            dictionary[dest2] += [Values]
+        if dest3 != "['']":
+            dictionary[dest3] += [Values]
+        print(dictionary)
+    return dictionary, new_table
+
+def Read():
+    address_field.delete(0, END)
+    address_field.insert(END, tkinter.filedialog.askopenfilename())
     return
 
-def Wyślij():
-    nowa_tablica = []
-    tablica = pyexcel.get_sheet(file_name=pole_adresu.get())
-    słownik = {}
-    for i in range(0, 10):
-        nowa_tablica.append(tablica.row[i])
-    dane = pyexcel.get_sheet(file_name=pole_adresu.get(), start_row=10)
-    for row in dane:
-        adres1 = str(row[-2:-1])
-        adres2 = str(row[-1:])
-        wartości = row[:-3]
-        słownik.setdefault(adres1, [wartości])
-        słownik.setdefault(adres2, [wartości])
-        słownik[adres1] += [wartości]
-        słownik[adres2] += [wartości]
-    for cel in słownik:
-        x = nowa_tablica + słownik[cel]
-        do_excela(x)
-        emailer(treść_wiadomości.get(), tytuł_wiadomości.get(),cel)
+def Send():
+    if (address_field.get() != '') and (address_field.get() != 'Plik rozesłany prawidłowo'):
+        dictionary, new_table = Processing()
+        for cel in dictionary:
+            x = new_table + dictionary[cel]
+            To_excel(x)
+            Emailer(message.get(), email_subject.get(), cel)
+        address_field.delete(0, END)
+        address_field.insert(END, 'Plik rozesłany prawidłowo')
+    else:
+        address_field.delete(0, END)
+        address_field.insert(END, 'Najpierw wskaż plik do wysyłki !!!')
 
 
 if __name__ == "__main__":
-    okno = tkinter.Tk()
-    okno.title("Rozsyłanie danych dla kierowców")
-    okno.geometry("650x160")
-    ramka = ttk.Frame(okno, padding=(10, 10, 10, 10))
-    pole_adresu = ttk.Entry(ramka, width = 80)
-    treść_wiadomości = ttk.Entry(ramka, width = 80)
-    tytuł_wiadomości = ttk.Entry(ramka, width = 80)
-    treść_wiadomości.insert(END, 'W załączniku znajdują się dane z transportów - TESTY')
-    tytuł_wiadomości.insert(END, 'TEST - Wysłki danych')
-    etykieta1 = ttk.Label(ramka, text='Temat')
-    etykieta2 = ttk.Label(ramka, text='Treść wiadomości')
-    etykieta3 = ttk.Label(ramka, text='Lokalizacja pliku')
-    p_wczytaj = ttk.Button(ramka, text = "Wskaż plik", command = lambda: Wczytaj() )
-    p_wyślij = ttk.Button(ramka, text = "Wyślij", command = lambda: Wyślij())
-    etykieta3.grid(row=0, stick=W, padx=5, pady=5)
-    etykieta1.grid(row = 1, stick = W, padx=5, pady=5)
-    etykieta2.grid(row = 2, stick = W, padx=5, pady=5)
-    pole_adresu.grid(row=0, column=1, columnspan = 2, stick=W + E, padx=5, pady=5)
-    tytuł_wiadomości.grid(row = 1, column = 1, columnspan = 2, stick = W +E, padx=5, pady=5)
-    treść_wiadomości.grid(row = 2, column = 1, columnspan = 2, stick = W + E, padx=5, pady=5)
-    p_wczytaj.grid(row = 3, column = 1, stick = W, padx=5, pady=5)
-    p_wyślij.grid(row = 3, column = 1, stick = E, padx=5, pady=5)
-    ramka.pack(fill=BOTH)
-    okno.mainloop()
-
-
-
-
-
-
+    Window = tkinter.Tk()
+    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.3')
+    Window.geometry('650x160')
+    Frame = ttk.Frame(Window, padding=(10, 10, 10, 10))
+    address_field = ttk.Entry(Frame, width = 80)
+    message = ttk.Entry(Frame, width = 80)
+    email_subject = ttk.Entry(Frame, width = 80)
+    message.insert(END, 'W załączniku znajdują się dane z transportów - TESTY')
+    email_subject.insert(END, 'TEST - Wysłki danych')
+    Lable1 = ttk.Label(Frame, text='Temat')
+    Lable2 = ttk.Label(Frame, text='Treść wiadomości')
+    Lable3 = ttk.Label(Frame, text='Lokalizacja pliku')
+    button_read = ttk.Button(Frame, text ='Wskaż plik', command = lambda: Read())
+    button_send = ttk.Button(Frame, text ='Wyślij', command = lambda: Send())
+    Lable3.grid(row=0, stick=W, padx=5, pady=5)
+    Lable1.grid(row = 1, stick = W, padx=5, pady=5)
+    Lable2.grid(row = 2, stick = W, padx=5, pady=5)
+    address_field.grid(row=0, column=1, columnspan = 2, stick=W + E, padx=5, pady=5)
+    email_subject.grid(row = 1, column = 1, columnspan = 2, stick =W + E, padx=5, pady=5)
+    message.grid(row = 2, column = 1, columnspan = 2, stick =W + E, padx=5, pady=5)
+    button_read.grid(row = 3, column = 1, stick = W, padx=5, pady=5)
+    button_send.grid(row = 3, column = 2, stick = E, padx=5, pady=5)
+    Frame.pack(fill=BOTH)
+    Window.mainloop()
