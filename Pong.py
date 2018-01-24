@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, time
 from pygame.locals import *
 
 FPS = 150
@@ -26,7 +26,9 @@ def drawPaddle(paddle):
     pygame.draw.rect(screen, white, paddle)
 
 def drawBall(ball):
-    pygame.draw.ellipse(screen, white, ball)
+    #pygame.draw.ellipse(screen, white, ball)
+    ballImg = pygame.image.load('ball.png')
+    screen.blit(ballImg, ball)
 
 def moveBall(ball, ballDirX, ballDirY):
     ball.x += ballDirX
@@ -94,6 +96,17 @@ def displayScore_cpu(score_cpu):
     resultRect.topleft = (window_width - 150, 25)
     screen.blit(resultSurf, resultRect)
 
+def showResult(score, score_cpu):
+    screen.fill((0, 0, 0))
+    pygame.draw.rect(screen, white, ((0, 0), (window_width, window_height)), line_thickness * 2)
+    Result = basicFont.render('Wynik %s : %s' %(score, score_cpu),True, white)
+    ResultRect = Result.get_rect()
+    ResultRect.center = (window_width/2, window_height/2)
+    screen.blit(Result, ResultRect)
+    pygame.display.update()
+    time.sleep(3)
+    main()
+
 
 
 def main():
@@ -124,12 +137,10 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            elif (score > score_cpu) and (score > 3):
-                pygame.quit()
-                sys.exit()
-            elif (score_cpu > score) and (score_cpu > 3):
-                pygame.quit()
-                sys.exit()
+            if (score > score_cpu +1 ) and (score > 3):
+                showResult(score, score_cpu)
+            if (score_cpu > score + 1) and (score_cpu > 5):
+                showResult(score, score_cpu)
             elif event.type == MOUSEMOTION:
                 mousex, mousey = event.pos
                 paddle1.y = mousey
@@ -147,7 +158,7 @@ def main():
         displayScore_cpu(score_cpu)
         pygame.display.update()
         fpsClock.tick(FPS)
-    if score > score_cpu:
+
 
 if __name__ == '__main__':
     main()
