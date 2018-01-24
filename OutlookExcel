@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #--------------
-# WERSJA 1.3
+# WERSJA 1.3.1
 #--------------
 
 
@@ -38,7 +38,6 @@ def Processing():
         dest3 = str(row[-3:-2])
         dest1 = str(row[-2:-1])
         dest2 = str(row[-1:])
-        print(dest2 , dest1, dest3)
         Values = row[:-4]
         if dest1 != "['']":
             dictionary.setdefault(dest1, [])
@@ -52,7 +51,6 @@ def Processing():
             dictionary[dest2] += [Values]
         if dest3 != "['']":
             dictionary[dest3] += [Values]
-        print(dictionary)
     return dictionary, new_table
 
 def Read():
@@ -76,14 +74,14 @@ def Send():
 
 if __name__ == "__main__":
     Window = tkinter.Tk()
-    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.3')
+    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.3.1')
     Window.geometry('650x160')
     Frame = ttk.Frame(Window, padding=(10, 10, 10, 10))
     address_field = ttk.Entry(Frame, width = 80)
     message = ttk.Entry(Frame, width = 80)
     email_subject = ttk.Entry(Frame, width = 80)
-    message.insert(END, 'W załączniku znajdują się dane z transportów - TESTY')
-    email_subject.insert(END, 'TEST - Wysłki danych')
+    message.insert(END, 'UWAGA: w Polsce na dzień dzisiejszy zarejestrowano aż 107 ognisk ASF u trzody chlewnej oraz 1081 przypadków ASF u dzików. Aktualna mapka sytuacyjna ASF w Polsce dostępna jest na stronie https://www.wetgiw.gov.pl/asf/mapa/ Zróbmy wszystko by wirus ASF nie dostał się do ferm, gdzie znajdują się Nasze zwierzęta- ruch ludzi oraz transport zwierząt i paszy ma największe znaczenie. Przypominamy o stosowaniu Bioasekuracji zawsze na najwyższym poziomie.')
+    email_subject.insert(END, 'Harmonogram transportu zwierząt tydz')
     Lable1 = ttk.Label(Frame, text='Temat')
     Lable2 = ttk.Label(Frame, text='Treść wiadomości')
     Lable3 = ttk.Label(Frame, text='Lokalizacja pliku')
