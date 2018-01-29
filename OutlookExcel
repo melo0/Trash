@@ -2,21 +2,71 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #--------------
-# WERSJA 1.4
+# WERSJA 1.6
 #--------------
 
-
 import win32com.client as win32
-import pyexcel
+import pyexcel, xlsxwriter
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import tkinter.ttk
 import string
 
-
 def To_excel(value):
-    pyexcel.save_as(array=value, dest_file_name=r'C:/Send/Excel.xls')
+
+    workbook = xlsxwriter.Workbook(r'C:/Send/Excel.xlsx')
+    worksheet = workbook.add_worksheet('Nowy')
+    green = workbook.add_format({'border': 1, 'border_color': '#000000', 'bg_color': '#00ff00'})
+    red = workbook.add_format({'border': 1, 'border_color': '#000000', 'color': '#ff0000', 'font_strikeout': 1})
+    black = workbook.add_format(({'border': 1, 'border_color': '#000000'}))
+    without_border = workbook.add_format(({'border': 0, 'border_color': '#00ff00'}))
+    r = 0
+    c = 0
+    for i in value[:9]:
+        for k in i:
+            worksheet.write(r, c, k, without_border)
+            c += 1
+        r += 1
+        c = 0
+    rd = 9
+    cd = 0
+    worksheet.set_column(0, 0, 10)
+    worksheet.set_column(1, 1, 5)
+    worksheet.set_column(2, 2, 25)
+    worksheet.set_column(3, 3, 9)
+    worksheet.set_column(4, 4, 4)
+    worksheet.set_column(5, 5, 14)
+    worksheet.set_column(6, 8, 7)
+    worksheet.set_column(9, 9, 25)
+    worksheet.set_column(10, 10, 8)
+    worksheet.set_column(11, 11, 4)
+    worksheet.set_column(12, 12, 14)
+    worksheet.set_column(13, 13, 15)
+    worksheet.set_column(14, 16, 5)
+    worksheet.set_column(17, 19, 10)
+    worksheet.set_column(20, 20, 30)
+    worksheet.set_column(21, 21, 10)
+    for i in value[9:]:
+        if str(i[21]) == 'zmieniono':
+            for k in i:
+                worksheet.write(rd, cd, k, green)
+                cd += 1
+            rd += 1
+            cd = 0
+        elif str(i[21]) == 'odwołano':
+            for k in i:
+                worksheet.write(rd, cd, k, red)
+                cd += 1
+            rd += 1
+            cd = 0
+        else:
+            for k in i:
+                worksheet.write(rd, cd, k, black)
+                cd += 1
+            rd += 1
+            cd = 0
+    workbook.close()
 
 def Emailer(text, subject, recipient):
     outlook = win32.Dispatch('outlook.application')
@@ -24,7 +74,7 @@ def Emailer(text, subject, recipient):
     mail.BCC = recipient
     mail.Subject = subject
     mail.HtmlBody = text
-    attachment = str(r'C:/Send/Excel.xls')
+    attachment = str(r'C:/Send/Excel.xlsx')
     mail.Attachments.Add(attachment)
     mail.send
 
@@ -39,7 +89,7 @@ def Processing():
         dest3 = str(row[-3:-2])
         dest1 = str(row[-2:-1])
         dest2 = str(row[-1:])
-        Values = row[:-4]
+        Values = row[:22]
         if '@' in dest1:
             dictionary.setdefault(dest1, [])
         if '@' in dest2:
@@ -75,14 +125,14 @@ def Send():
 
 if __name__ == "__main__":
     Window = tkinter.Tk()
-    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.4')
+    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.6')
     Window.geometry('650x160')
     Frame = ttk.Frame(Window, padding=(10, 10, 10, 10))
     address_field = ttk.Entry(Frame, width = 80)
     message = ttk.Entry(Frame, width = 80)
     email_subject = ttk.Entry(Frame, width = 80)
-    message.insert(END, 'W załączniku znajdują się dane z transportów - TESTY')
-    email_subject.insert(END, 'TEST - Wysłki danych')
+    message.insert(END, 'UWAGA: w Polsce na dzień dzisiejszy zarejestrowano aż 107 ognisk ASF u trzody chlewnej oraz 1081 przypadków ASF u dzików. Aktualna mapka sytuacyjna ASF w Polsce dostępna jest na stronie https://www.wetgiw.gov.pl/asf/mapa/ Zróbmy wszystko by wirus ASF nie dostał się do ferm, gdzie znajdują się Nasze zwierzęta- ruch ludzi oraz transport zwierząt i paszy ma największe znaczenie. Przypominamy o stosowaniu Bioasekuracji zawsze na najwyższym poziomie.')
+    email_subject.insert(END, 'Harmonogram transportu zwierząt tydz')
     Lable1 = ttk.Label(Frame, text='Temat')
     Lable2 = ttk.Label(Frame, text='Treść wiadomości')
     Lable3 = ttk.Label(Frame, text='Lokalizacja pliku')
