@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #--------------
-# WERSJA 1.8
+# WERSJA 1.9
 #--------------
 
 import win32com.client as win32
@@ -72,6 +72,7 @@ def To_excel(value):
                 cd += 1
             rd += 1
             cd = 0
+    worksheet.autofilter(9 , 1, 9, 19)
     workbook.close()
 
 def Emailer(text, subject, recipient):
@@ -131,7 +132,7 @@ def Send():
 
 if __name__ == "__main__":
     Window = tkinter.Tk()
-    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.8')
+    Window.title('Rozsyłanie danych dla kierowców  d|*_*|p  ver. 1.9')
     Window.geometry('650x160')
     Frame = ttk.Frame(Window, padding=(10, 10, 10, 10))
     address_field = ttk.Entry(Frame, width = 80)
