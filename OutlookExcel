@@ -137,7 +137,7 @@ if __name__ == "__main__":
     Window.geometry('650x300')
     Frame = ttk.Frame(Window, padding=(10, 10, 10, 10))
     address_field = ttk.Entry(Frame, width = 80)
-    message = tkinter.Text(Frame, width = 40, height = 10)
+    message = tkinter.Text(Frame, width = 40, height = 10, wrap = WORD)
     email_subject = ttk.Entry(Frame, width = 80)
     message.insert(END, 'UWAGA: w Polsce na dzień dzisiejszy zarejestrowano aż 107 ognisk ASF u trzody chlewnej oraz 1081 przypadków ASF u dzików. Aktualna mapka sytuacyjna ASF w Polsce dostępna jest na stronie https://www.wetgiw.gov.pl/asf/mapa/ Zróbmy wszystko by wirus ASF nie dostał się do ferm, gdzie znajdują się Nasze zwierzęta- ruch ludzi oraz transport zwierząt i paszy ma największe znaczenie. Przypominamy o stosowaniu Bioasekuracji zawsze na najwyższym poziomie.')
     email_subject.insert(END, 'Harmonogram transportu zwierząt tydz')
