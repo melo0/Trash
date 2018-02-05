@@ -92,9 +92,9 @@ def Processing():
         new_table.append(table.row[i])
     Sheet = pyexcel.get_sheet(file_name=address_field.get(), start_row=10)
     for row in Sheet:
-        dest3 = str(row[20])
-        dest1 = str(row[21])
-        dest2 = str(row[22])
+        dest3 = str(row[21])
+        dest1 = str(row[22])
+        dest2 = str(row[23])
         Values = row[:20]
         if '@' in dest1:
             dictionary.setdefault(dest1, [])
